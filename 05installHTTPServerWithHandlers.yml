@@ -1,7 +1,7 @@
 #This play book will explains handlers as well.
 ---
-- hosts: devops-group
-  become: true
+- hosts: all
+  become: yes
   tasks:
     - name: Install Apache HTTP Server
       yum: name=httpd update_cache=yes state=latest
