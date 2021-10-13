@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: Ubuntu
   #gather_facts: no
   become: yes
   tasks:
