@@ -9,6 +9,6 @@
       service: name=httpd enabled=yes state=started
     - name: Insert Index Page
       template:
-       src: /cosmix/index.html
+       src: index.html
        dest: /var/www/html/index.html
 ...
