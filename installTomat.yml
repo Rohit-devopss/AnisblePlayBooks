@@ -1,5 +1,4 @@
-- hosts: Amazon-linux-2
-  user: rohit5521
+- hosts: tomcatserver
   become: true
   tasks:
     - name: Install Java
