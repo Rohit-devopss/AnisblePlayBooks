@@ -4,15 +4,11 @@
   become: true
   tasks:
     - name: install apache2
-      command: apt-get install apache2 -y
-      when: ansible_os_family== "Debian"
-    - name: install apache2
-      command: yum install httpd -y
-      when: ansible_os_family== "RedHat"
+      yum: name=httpd state=latest
     - name: Start HTTP Server
       service: name=httpd enabled=yes state=started
     - name: Insert Index Page
       template:
-       src: index.html
+       src: /cosmix/index.html
        dest: /var/www/html/index.html
 ...
