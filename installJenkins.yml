@@ -1,38 +1,25 @@
 ---
 - hosts: tomcatserver
-  become: yes
-  become_user: root
+  remote_user: admin
+  become: true
   tasks:
-  - name: Download Long Term Jenkins release
-    get_url:
-      url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
-      dest: /etc/yum.repos.d/jenkins.repo
-
-  - name: Import jenkins key from url
-    ansible.builtin.rpm_key:
-      state: present
-      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-
-  - name: yum update
-    yum:
-      name: '*'
-      state: latest
-
-  - name: Install java
-    yum:
-      name: java-1.8*
-      state: present
-
-  - name: Install jenkins
-  - command: sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-  - command: sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-  - command: Sudo yum install jenkins -y
-
-  - name: daemon-reload to pick up config changes
-    ansible.builtin.systemd:
-      daemon_reload: yes
-
-  - name: Start jenkins
-    ansible.builtin.systemd:
-      name: jenkins
-      state: started
+    - name: Ensure Jenkins repository is added
+      yum_repository:
+        name: jenkins-ci
+        description: jenkins-ci package repository
+        baseurl: http://pkg.jenkins.io/redhat
+        gpgkey: https://pkg.jenkins.io/redhat/jenkins.io.key
+        gpgcheck: yes
+    - name: Ensure gpp key is imported
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat/jenkins.io.key
+    - name: Ensure Jenkins and java-devel package installed
+      yum:
+        name: '{{ packages }}'
+        state: present
+        update_cache: true
+      vars:
+        packages:
+          - jenkins
+          - java-devel
